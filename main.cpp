@@ -13,6 +13,15 @@ struct sort_second {
     }
 };
 
+// return index of record if it exists, -1 if not
+int recordIndex(vector<pair<string, int>> *records, string name) {
+	int i = 0;
+	for(vector<pair<string, int>>::iterator it = records->begin(); it != records->end(); it++, i++) {
+		if(it->first == name) return i;
+	}
+	return -1;
+}
+
 void readCsv(ifstream &inFile, vector<pair<string,int>> *records);
 
 void mainMenu(vector<pair<string,int>> *records);
@@ -88,33 +97,42 @@ void upcomingMaintenance(vector<pair<string,int>> *records) {
 	cin >> choice;
 	if(choice == 1) mainMenu(records);
 }
+
 void allRecords(vector<pair<string,int>> *records) {
 	sort(records->begin(), records->end());
-	if(records->size() >= 5) {
-		for(int i = 0; i < 5; i++) {
-			cout << endl << records->at(i).second << "\t" << records->at(i).first;
-		}
-	}
-	else {
-		for(vector<pair<string, int>>::iterator it = records->begin(); it != records->end(); it++) {
-			cout << endl << it->second << "\t" << it->first;
-		}
+	for(vector<pair<string, int>>::iterator it = records->begin(); it != records->end(); it++) {
+		cout << endl << it->second << "\t" << it->first;
 	}
 	cout << endl << endl << "Press 1 to go back to Main Menu. Press any other key + ENTER to exit." << endl;	
 	int choice;
 	cin >> choice;
 	if(choice == 1) mainMenu(records);
 }
+
 void updateRecord(vector<pair<string,int>> *records) {
-	cout << "update" << endl;
+	string name;
+	int mileage, choice;
+	int index = -2;
+
+	while(index < 0) {
+		if(index == -1) cout << "The record \"" << name << "\" does not exist." << endl;
+		cout << "What maintenance record do you want to update?" << endl;
+		getline(cin.ignore(), name);
+		index = recordIndex(records, name);
+	}
+
+	cout << "When should " << name << " maintenance be performed again? Enter the mileage" << endl;
+	cin >> mileage;
+	records->at(index).second = mileage;
+
 	cout << endl << "Press 1 to go back to Main Menu. Press any other key + ENTER to exit." << endl;	
-	int choice;
 	cin >> choice;
 	if(choice == 1) mainMenu(records);
 }
+
 void addRecord(vector<pair<string,int>> *records) {
 	string name;
-	int miles;
+	int miles, choice;
 	cout << "Type the name of the maintenance being performed and then hit ENTER" << endl;
 	getline(cin.ignore(), name);
 	cout << "Type the number of miles at which the maintenance needs to be performed next and then hit ENTER" << endl;
@@ -122,14 +140,26 @@ void addRecord(vector<pair<string,int>> *records) {
 	records->push_back(make_pair(name, miles));
 	cout << "Maintenance record successfully added..." << endl;
 	cout << endl << "Press 1 to go back to Main Menu. Press any other key + ENTER to exit." << endl;	
-	int choice;
 	cin >> choice;
 	if(choice == 1) mainMenu(records);
 }
+
 void deleteRecord(vector<pair<string,int>> *records) {
-	cout << "delete" << endl;
-	cout << endl << "Press 1 to go back to Main Menu. Press any other key + ENTER to exit." << endl;	
+	string name;
 	int choice;
+	int index = -2;
+
+	while(index < 0) {
+		if(index == -1) cout << "The record \"" << name << "\" does not exist." << endl;
+		cout << "What maintenance record do you want to delete?" << endl;
+		getline(cin.ignore(), name);
+		index = recordIndex(records, name);
+	}
+
+	records->erase(records->begin() + index);
+	cout << "Record successfully deleted" << endl;
+
+	cout << endl << "Press 1 to go back to Main Menu. Press any other key + ENTER to exit." << endl;	
 	cin >> choice;
 	if(choice == 1) mainMenu(records);
 }
