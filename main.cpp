@@ -69,7 +69,7 @@ void mainMenu(vector<pair<string,int>> *records) {
 	options[4] = deleteRecord;
 
     do {
-        cout << "Main Menu" << endl << "Choose one of the options below and then hit ENTER. Or press 0 + ENTER to exit" << endl;
+        cout << endl << "Main Menu" << endl << "Choose one of the options below and then hit ENTER. Or press 0 + ENTER to exit" << endl;
         cout << "1. Upcoming Maintenance Required" << endl;
         cout << "2. All Maintenance Records" << endl;
         cout << "3. Update Maintenance Record" << endl;
